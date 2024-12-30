@@ -51,7 +51,7 @@ func findPath(w http.ResponseWriter, r *http.Request) {
 	visited := make(map[Point]bool)
 	var path []Point
 	if dfs(req.Grid, req.Start.X, req.Start.Y, req.End, &path, visited) {
-		w.Header().Set("Content-Type", "application/josn")
+		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(path)
 	} else {
 		http.Error(w, "No path found", http.StatusNotFound)
