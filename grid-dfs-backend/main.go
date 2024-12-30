@@ -34,10 +34,11 @@ func dfs(grid [][]int, x, y int, end Point, path *[]Point, vis map[Point]bool) b
 	directions := []Point{{0, 1}, {1, 0}, {0, -1}, {-1, 0}}
 	for _, d := range directions {
 		if dfs(grid, x+d.X, y+d.Y, end, path, vis) {
+			*path = append([]Point{Point{x, y}}, *path...)
 			return true
 		}
 	}
-	*path = (*path)[:len(*path)-1]
+	vis[Point{x, y}] = false
 	return false
 }
 
@@ -62,6 +63,10 @@ func corsMiddleware(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "*")
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
 		next.ServeHTTP(w, r)
 	})
 }
